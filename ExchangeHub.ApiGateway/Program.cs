@@ -1,4 +1,6 @@
-﻿namespace ExchangeHub.ApiGateway;
+﻿using System;
+
+namespace ExchangeHub.ApiGateway;
 
 class Program
 {

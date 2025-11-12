@@ -1,3 +1,5 @@
+using System;
+
 namespace ExchangeHub.UserService;
 
 public class WeatherForecast
