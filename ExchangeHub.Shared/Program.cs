@@ -1,4 +1,6 @@
-﻿namespace ExchangeHub.Shared;
+﻿using System;
+
+namespace ExchangeHub.Shared;
 
 class Program
 {

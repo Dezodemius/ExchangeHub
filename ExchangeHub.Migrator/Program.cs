@@ -1,4 +1,6 @@
-﻿namespace ExchangeHub.Migrator;
+﻿using System;
+
+namespace ExchangeHub.Migrator;
 
 class Program
 {

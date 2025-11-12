@@ -1,3 +1,5 @@
+using System;
+
 namespace ExchangeHub.CurrencyWorker;
 
 public class WeatherForecast
