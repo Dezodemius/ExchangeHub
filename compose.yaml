@@ -1,0 +1,31 @@
+﻿services:
+  exchangehub:
+    image: exchangehub
+    build:
+      context: .
+      dockerfile: ExchangeHub/Dockerfile
+
+  exchangehub.userservice:
+    image: exchangehub.userservice
+    build:
+      context: .
+      dockerfile: ExchangeHub.UserService/Dockerfile
+
+  exchangehub.financeservice:
+    image: exchangehub.financeservice
+    build:
+      context: .
+      dockerfile: ExchangeHub.FinanceService/Dockerfile
+
+  exchangehub.currencyworker:
+    image: exchangehub.currencyworker
+    build:
+      context: .
+      dockerfile: ExchangeHub.CurrencyWorker/Dockerfile
+
+  exchangehub.migrator:
+    image: exchangehub.migrator
+    build:
+      context: .
+      dockerfile: ExchangeHub.Migrator/Dockerfile
+
