@@ -1,6 +1,0 @@
-@ExchangeHub.CurrencyWorker_HostAddress = http://localhost:5030
-
-GET {{ExchangeHub.CurrencyWorker_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
