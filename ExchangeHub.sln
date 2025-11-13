@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeHub.UserService", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeHub.FinanceService", "ExchangeHub.FinanceService\ExchangeHub.FinanceService.csproj", "{2C81B7E6-D656-4222-B96F-678C29FC9D85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeHub.CurrencyWorker", "ExchangeHub.CurrencyWorker\ExchangeHub.CurrencyWorker.csproj", "{92E8F292-F881-437F-8FEB-E2CB9731C15F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeHub.Migrator", "ExchangeHub.Migrator\ExchangeHub.Migrator.csproj", "{51122173-E84E-4079-8AE9-93746C0E8676}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeHub.ApiGateway", "ExchangeHub.ApiGateway\ExchangeHub.ApiGateway.csproj", "{5F104D62-BA21-4B54-999E-AEC4350D6A58}"
@@ -21,6 +19,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeHub.FinanceService.Tests", "ExchangeHub.FinanceService.Tests\ExchangeHub.FinanceService.Tests.csproj", "{9521BCA9-A147-4DC6-A8DF-2966B818424B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeHub.UserService.Tests", "ExchangeHub.UserService.Tests\ExchangeHub.UserService.Tests.csproj", "{1B344CFA-01C1-49D7-ADB1-6F24D1DAE183}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeHub.CurrencyWorker", "ExchangeHub.CurrencyWorker\ExchangeHub.CurrencyWorker.csproj", "{5E73F03A-425A-4C1C-B294-C13B46E19A59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,10 +36,6 @@ Global
 		{2C81B7E6-D656-4222-B96F-678C29FC9D85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C81B7E6-D656-4222-B96F-678C29FC9D85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C81B7E6-D656-4222-B96F-678C29FC9D85}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92E8F292-F881-437F-8FEB-E2CB9731C15F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92E8F292-F881-437F-8FEB-E2CB9731C15F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92E8F292-F881-437F-8FEB-E2CB9731C15F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92E8F292-F881-437F-8FEB-E2CB9731C15F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51122173-E84E-4079-8AE9-93746C0E8676}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{51122173-E84E-4079-8AE9-93746C0E8676}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51122173-E84E-4079-8AE9-93746C0E8676}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,5 +56,9 @@ Global
 		{1B344CFA-01C1-49D7-ADB1-6F24D1DAE183}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B344CFA-01C1-49D7-ADB1-6F24D1DAE183}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B344CFA-01C1-49D7-ADB1-6F24D1DAE183}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E73F03A-425A-4C1C-B294-C13B46E19A59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E73F03A-425A-4C1C-B294-C13B46E19A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E73F03A-425A-4C1C-B294-C13B46E19A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E73F03A-425A-4C1C-B294-C13B46E19A59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
