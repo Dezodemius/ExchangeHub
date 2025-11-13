@@ -1,8 +1,10 @@
-﻿namespace ExchangeHub.Shared;
+﻿using System.Collections.Generic;
+
+namespace ExchangeHub.Shared;
 
 public class Currency
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public string Code { get; set; } = null!;
     public string Name { get; set; } = null!;
     public decimal Rate { get; set; }
