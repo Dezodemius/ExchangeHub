@@ -1,4 +1,6 @@
 using System.Text;
+using ExchangeHub.UserService.Queries.LoginUser;
+using ExchangeHub.UserService.Queries.RegisterUser;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,8 +20,6 @@ public class Program
         builder.Services.AddDbContext<UserServiceDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        builder.Services.AddScoped<IUserService, UserService>();
-
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", policy =>
@@ -31,14 +31,9 @@ public class Program
         });
         builder.WebHost.ConfigureKestrel((context, options) =>
         {
-            var port = context.Configuration["PORT"];
-            if (!string.IsNullOrEmpty(port))
-            {
-                options.ListenAnyIP(int.Parse(port));
-            }
+            options.Configure(context.Configuration.GetSection("Kestrel"));
         });
         builder.Services.AddControllers();
-
         var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
         builder.Services.AddAuthentication(options =>
             {
@@ -57,8 +52,16 @@ public class Program
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });
+
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IPasswordHelper, PasswordHelper>();
+        builder.Services.AddScoped<IJwtService, JwtService>();
+        builder.Services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(RegisterUserQuery).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(LoginUserQuery).Assembly);
+        });
+        
         builder.WebHost.UseKestrel(); 
         
         var app = builder.Build();

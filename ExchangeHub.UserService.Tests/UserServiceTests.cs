@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using ExchangeHub.Shared;
 using Moq;
 
@@ -48,7 +49,7 @@ public class UserServiceTests
             .Setup(m => m.VerifyPassword(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(true);
 
-        var loggedUser = _userService.AuthenticateAsync(UserName, UserPassword).Result;
+        var loggedUser = _userService.AuthenticateAsync(UserName, UserPassword, CancellationToken.None).Result;
         Assert.Multiple(() =>
         {
             Assert.That(loggedUser, Is.Not.Null);
@@ -66,7 +67,7 @@ public class UserServiceTests
             .Setup(m => m.VerifyPassword(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(false);
         
-        var loggedUser = _userService.AuthenticateAsync(UserName, UserPassword).Result;
+        var loggedUser = _userService.AuthenticateAsync(UserName, UserPassword, CancellationToken.None).Result;
 
         Assert.Multiple(() =>
         {
@@ -90,7 +91,7 @@ public class UserServiceTests
             .Setup(m => m.VerifyPassword(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(false);
         
-        var loggedUser = _userService.AuthenticateAsync(UserName, "WrongTestPassword").Result;
+        var loggedUser = _userService.AuthenticateAsync(UserName, "WrongTestPassword", CancellationToken.None).Result;
 
         Assert.Multiple(() =>
         {
@@ -111,7 +112,7 @@ public class UserServiceTests
         this._passwordHelperMock
             .Setup(m => m.HashPassword(It.IsAny<string>()))
             .Returns(UserPassword);
-        var registeredUser = _userService.RegisterAsync(UserName, UserPassword).Result;
+        var registeredUser = _userService.RegisterAsync(UserName, UserPassword, CancellationToken.None).Result;
 
         Assert.Multiple(() =>
         {
@@ -134,19 +135,19 @@ public class UserServiceTests
         this._db.Users.Add(existingUser);
         this._db.SaveChanges();
 
-        Assert.ThrowsAsync<InvalidOperationException>(() => _userService.RegisterAsync(UserName, UserPassword));
+        Assert.ThrowsAsync<InvalidOperationException>(() => _userService.RegisterAsync(UserName, UserPassword, CancellationToken.None));
     }
 
     [Test]
     public void RegisterAsync_UserWithEmptyName_ShouldThrowsException()
     {
-        Assert.ThrowsAsync<ArgumentNullException>(() => _userService.RegisterAsync(string.Empty, UserPassword));
+        Assert.ThrowsAsync<ArgumentNullException>(() => _userService.RegisterAsync(string.Empty, UserPassword, CancellationToken.None));
     }
 
     [Test]
     public void RegisterAsync_UserWithEmptyPassword_ShouldThrowsException()
     {
-        Assert.ThrowsAsync<ArgumentNullException>(() => _userService.RegisterAsync(UserName, string.Empty));
+        Assert.ThrowsAsync<ArgumentNullException>(() => _userService.RegisterAsync(UserName, string.Empty, CancellationToken.None));
     }
 
     #endregion

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExchangeHub.UserService;
 
-public class UserServiceDbContext : DbContext
+public class UserServiceDbContext : DbContext, IUserServiceDbContext
 {
     public UserServiceDbContext(DbContextOptions<UserServiceDbContext> options)
         : base(options) { }

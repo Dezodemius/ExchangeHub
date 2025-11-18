@@ -24,8 +24,6 @@ public class FinanceController : ControllerBase
     public async Task<IActionResult> GetFavorites()
     {
         var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-
         var result = await _mediator.Send(new GetUserFavoriteCurrenciesQuery(userId));
         return Ok(result);
     }
