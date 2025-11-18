@@ -1,6 +1,0 @@
-@ExchangeHub.FinanceService_HostAddress = http://localhost:5273
-
-GET {{ExchangeHub.FinanceService_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

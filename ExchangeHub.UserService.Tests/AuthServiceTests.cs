@@ -1,0 +1,157 @@
+﻿using System;
+using System.Threading;
+using ExchangeHub.UserService.Application.Interfaces;
+using ExchangeHub.UserService.Application.Services;
+using ExchangeHub.UserService.Domain.Entities;
+using ExchangeHub.UserService.Infrasturcture;
+using Moq;
+
+namespace ExchangeHub.UserService.Tests;
+
+public class AuthServiceTests
+{
+    private const string UserName = "TestUser";
+    
+    private const string UserPassword = "TestPassword";
+    
+    private UserServiceDbContext _db;
+
+    private AuthService _authService;
+    
+    private Mock<IPasswordHelper> _passwordHelperMock;
+    
+    [SetUp]
+    public void SetUp()
+    {
+        this._db = DbContextCreator.Create();
+        this._passwordHelperMock = new Mock<IPasswordHelper>();
+        this._authService = new AuthService(_db, _passwordHelperMock.Object);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        this._passwordHelperMock.Reset();
+        this._db.Dispose();
+    }
+
+    #region AuthenticateAsync
+
+    [Test]
+    public void AuthenticateAsync_RegisteredUser_ShouldBeAuthenticated()
+    {
+        var registeredUser = new User
+        {
+            Name = UserName,
+            Password = UserPassword
+        };
+        this._db.Users.Add(registeredUser);
+        this._db.SaveChanges();
+        
+        this._passwordHelperMock
+            .Setup(m => m.VerifyPassword(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(true);
+
+        var loggedUser = _authService.AuthenticateAsync(UserName, UserPassword, CancellationToken.None).Result;
+        Assert.Multiple(() =>
+        {
+            Assert.That(loggedUser, Is.Not.Null);
+            Assert.That(loggedUser.Id, Is.EqualTo(registeredUser.Id));
+            Assert.That(loggedUser.Name, Is.EqualTo(registeredUser.Name));
+            Assert.That(loggedUser.Password, Is.EqualTo(registeredUser.Password));
+            _passwordHelperMock.Verify(ph => ph.VerifyPassword(UserPassword, UserPassword), Times.Once);
+        });
+    }  
+    
+    [Test]
+    public void AuthenticateAsync_UnregisteredUser_ShouldNotBeAuthenticated()
+    {
+        this._passwordHelperMock
+            .Setup(m => m.VerifyPassword(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(false);
+        
+        var loggedUser = _authService.AuthenticateAsync(UserName, UserPassword, CancellationToken.None).Result;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(loggedUser, Is.Null);
+            _passwordHelperMock.Verify(ph => ph.VerifyPassword(UserPassword, UserPassword), Times.Never);
+        });
+    }
+    
+    [Test]
+    public void AuthenticateAsync_RegisteredUserWithIncorrectPassword_ShouldNotBeAuthenticated()
+    {
+        var registeredUser = new User
+        {
+            Name = UserName,
+            Password = UserPassword
+        };
+        this._db.Users.Add(registeredUser);
+        this._db.SaveChanges();
+
+        this._passwordHelperMock
+            .Setup(m => m.VerifyPassword(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(false);
+        
+        var loggedUser = _authService.AuthenticateAsync(UserName, "WrongTestPassword", CancellationToken.None).Result;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(loggedUser, Is.Null);
+            this._passwordHelperMock
+                .Setup(m => m.VerifyPassword(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(false);
+        });
+    }
+    
+    #endregion
+
+    #region RegisterAsync
+
+    [Test]
+    public void RegisterAsync_NewUser_ShouldBeRegistered()
+    {
+        this._passwordHelperMock
+            .Setup(m => m.HashPassword(It.IsAny<string>()))
+            .Returns(UserPassword);
+        var registeredUser = _authService.RegisterAsync(UserName, UserPassword, CancellationToken.None).Result;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(registeredUser, Is.Not.Null);
+            Assert.That(registeredUser.Id, Is.EqualTo(registeredUser.Id));
+            Assert.That(registeredUser.Name, Is.EqualTo(registeredUser.Name));
+            Assert.That(registeredUser.Password, Is.EqualTo(registeredUser.Password));
+            _passwordHelperMock.Verify(ph => ph.HashPassword(UserPassword), Times.Once);
+        });
+    }
+
+    [Test]
+    public void RegisterAsync_ExistingUser_ShouldThrowsException()
+    {
+        var existingUser = new User
+        {
+            Name = UserName,
+            Password = UserPassword
+        };
+        this._db.Users.Add(existingUser);
+        this._db.SaveChanges();
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => _authService.RegisterAsync(UserName, UserPassword, CancellationToken.None));
+    }
+
+    [Test]
+    public void RegisterAsync_UserWithEmptyName_ShouldThrowsException()
+    {
+        Assert.ThrowsAsync<ArgumentNullException>(() => _authService.RegisterAsync(string.Empty, UserPassword, CancellationToken.None));
+    }
+
+    [Test]
+    public void RegisterAsync_UserWithEmptyPassword_ShouldThrowsException()
+    {
+        Assert.ThrowsAsync<ArgumentNullException>(() => _authService.RegisterAsync(UserName, string.Empty, CancellationToken.None));
+    }
+
+    #endregion
+}

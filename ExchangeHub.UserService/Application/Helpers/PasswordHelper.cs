@@ -1,0 +1,27 @@
+﻿using System;
+using System.Security.Cryptography;
+using ExchangeHub.UserService.Application.Interfaces;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+
+namespace ExchangeHub.UserService.Application.Helpers;
+
+internal class PasswordHelper : IPasswordHelper
+{
+    public string HashPassword(string password)
+    {
+        byte[] salt = RandomNumberGenerator.GetBytes(16);
+        var hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password, salt, KeyDerivationPrf.HMACSHA256, 10000, 32));
+        return $"{Convert.ToBase64String(salt)}.{hash}";
+    }
+
+    public bool VerifyPassword(string password, string storedHash)
+    {
+        var parts = storedHash.Split('.', 2);
+        if (parts.Length != 2) 
+            return false;
+        var salt = Convert.FromBase64String(parts[0]);
+        var hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA256, 10000, 32));
+        return hash == parts[1];
+    }
+}

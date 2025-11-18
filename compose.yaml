@@ -1,31 +1,91 @@
 ﻿services:
-  exchangehub:
-    image: exchangehub
-    build:
-      context: .
-      dockerfile: ExchangeHub/Dockerfile
+  postgres:
+    image: postgres:16
+    container_name: postgres_exchangehub  
+    restart: always
+    environment:
+      POSTGRES_DB: exchangehub
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - exchange-net
+    expose:
+      - "5432"
 
-  exchangehub.userservice:
-    image: exchangehub.userservice
-    build:
-      context: .
-      dockerfile: ExchangeHub.UserService/Dockerfile
-
-  exchangehub.financeservice:
-    image: exchangehub.financeservice
-    build:
-      context: .
-      dockerfile: ExchangeHub.FinanceService/Dockerfile
-
-  exchangehub.currencyworker:
-    image: exchangehub.currencyworker
-    build:
-      context: .
-      dockerfile: ExchangeHub.CurrencyWorker/Dockerfile
-
-  exchangehub.migrator:
-    image: exchangehub.migrator
+  migrator:
     build:
       context: .
       dockerfile: ExchangeHub.Migrator/Dockerfile
+    container_name: migrator
+    depends_on:
+      - postgres
+    networks:
+      - exchange-net
+    restart: "no"
 
+  userservice:
+    build:
+      context: .
+      dockerfile: ExchangeHub.UserService/Dockerfile
+    container_name: userservice
+    expose:
+      - "5001"
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_started
+    networks:
+      - exchange-net
+
+  financeservice:
+    build:
+      context: .
+      dockerfile: ExchangeHub.FinanceService/Dockerfile
+    container_name: financeservice
+    expose:
+      - "5002"
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_started
+    networks:
+      - exchange-net
+
+  currencyworker:
+    build:
+      context: .
+      dockerfile: ExchangeHub.CurrencyWorker/Dockerfile
+    container_name: currencyworker
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_started
+    networks:
+      - exchange-net
+
+  gateway:
+    build:
+      context: .
+      dockerfile: ExchangeHub.ApiGateway/Dockerfile
+    container_name: gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+    ports:
+      - "5000:5000"
+    depends_on:
+      - userservice
+      - financeservice
+    networks:
+      - exchange-net
+
+networks:
+  exchange-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
