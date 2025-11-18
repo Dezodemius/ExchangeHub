@@ -12,6 +12,7 @@ class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddReverseProxy().LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
         builder.WebHost.UseKestrel(); 
+        builder.Services.AddControllers();
         builder.Services.AddCors(options =>
         {
             options.AddDefaultPolicy(p =>
@@ -24,6 +25,7 @@ class Program
 
         app.UseCors();
         app.MapReverseProxy();
+        app.MapControllers();
 
         app.Run();
     }
