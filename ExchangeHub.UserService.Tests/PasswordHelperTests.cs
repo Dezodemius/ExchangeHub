@@ -25,9 +25,9 @@ public class PasswordHelperTests
     [Test]
     public void VerifyPassword_InvalidPassword_ShouldNotVerify()
     {
-        const string PasswordHash = "wrong.password";
+        const string PasswordHash = "OuYcbCgi0K8nnU69g4VTmA==.U+UvAD3hX6cIv0HyZULSPn+VK0WUXOrL+x6+8+NK7Iw=";
         var actual = _passwordHelper.VerifyPassword("password", PasswordHash);
-        Assert.That(actual, Is.True);  
+        Assert.That(actual, Is.False);  
     }
 
     [Test]
