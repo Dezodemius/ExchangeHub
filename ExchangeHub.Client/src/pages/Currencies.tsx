@@ -3,8 +3,8 @@ import { api } from '../api';
 import { Currency } from '../types';
 import { HeartButton } from '../Components/HeartButton';
 
-const FavoritesPage: React.FC = () => {
-    const [favorites, setFavorites] = useState<Currency[]>([]);
+const CurrenciesPage: React.FC = () => {
+    const [currencies, setCurrencies] = useState<Currency[]>([]);
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState<string | null>(null);
     const [updatingId, setUpdatingId] = useState<number | null>(null);
@@ -13,9 +13,8 @@ const FavoritesPage: React.FC = () => {
         setLoading(true);
         setMessage(null);
         try {
-            const res = await api.get<Currency[]>('/api/finance/favorites');
-            // на всякий случай проставим isFavorite = true
-            setFavorites(res.data.map(c => ({ ...c, isFavorite: true })));
+            const res = await api.get<Currency[]>('/api/finance/all');
+            setCurrencies(res.data);
         } catch (e: any) {
             setMessage(e.response?.data?.message ?? `Ошибка загрузки: ${e.message}`);
         } finally {
@@ -33,8 +32,12 @@ const FavoritesPage: React.FC = () => {
 
         try {
             await api.post('/api/auth/addfavorite', { currencyId: id });
-            // так как это избранные — после удаления просто фильтруем
-            setFavorites(prev => prev.filter(c => c.id !== id));
+
+            setCurrencies(prev =>
+                prev.map(c =>
+                    c.id === id ? { ...c, isFavorite: !c.isFavorite } : c
+                )
+            );
         } catch (e: any) {
             setMessage(e.response?.data?.message ?? `Ошибка обновления: ${e.message}`);
         } finally {
@@ -45,21 +48,21 @@ const FavoritesPage: React.FC = () => {
     return (
         <div className="page">
             <div className="page-header">
-                <h1>Избранные валюты</h1>
+                <h1>Все курсы валют</h1>
                 <button className="btn btn--ghost" onClick={load}>
                     Обновить
                 </button>
             </div>
 
-            {loading && <div className="info">Загрузка избранных...</div>}
+            {loading && <div className="info">Загрузка курсов...</div>}
             {message && <div className="info info--error">{message}</div>}
 
-            {!loading && favorites.length === 0 && (
-                <div className="info">У вас пока нет избранных валют.</div>
+            {!loading && currencies.length === 0 && (
+                <div className="info">Пока нет данных по валютам.</div>
             )}
 
             <div className="list">
-                {favorites.map(c => (
+                {currencies.map(c => (
                     <div className="list-item" key={c.id}>
                         <div className="list-item__main">
                             <div className="list-item__title">{c.name}</div>
@@ -81,4 +84,4 @@ const FavoritesPage: React.FC = () => {
     );
 };
 
-export default FavoritesPage;
+export default CurrenciesPage;
