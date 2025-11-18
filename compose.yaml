@@ -31,8 +31,10 @@ services:
     expose:
       - "5001"
     depends_on:
-      - postgres
-      - migrator
+      migrator:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_started
     networks:
       - exchange-net
 
@@ -42,8 +44,10 @@ services:
     expose:
       - "5002"
     depends_on:
-      - postgres
-      - migrator
+      migrator:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_started
     networks:
       - exchange-net
 
@@ -51,9 +55,10 @@ services:
     build: ./ExchangeHub.CurrencyWorker
     container_name: currencyworker
     depends_on:
-      - userservice
-      - financeservice
-      - postgres
+      migrator:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_started
     networks:
       - exchange-net
 

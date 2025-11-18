@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ExchangeHub.FinanceService;
@@ -14,6 +15,15 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.WebHost.ConfigureKestrel((context, options) =>
+        {
+            var port = context.Configuration["PORT"];
+            if (!string.IsNullOrEmpty(port))
+            {
+                options.ListenAnyIP(int.Parse(port));
+            }
+        });
+
         builder.Services.AddDbContext<FinanceServiceDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -42,6 +52,7 @@ public class Program
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });
+        builder.WebHost.UseKestrel(); 
 
         var app = builder.Build();
 

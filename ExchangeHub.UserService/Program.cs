@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,6 +52,7 @@ public class Program
             });
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IPasswordHelper, PasswordHelper>();
+        builder.WebHost.UseKestrel(); 
         
         var app = builder.Build();
 

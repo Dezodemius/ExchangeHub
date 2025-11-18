@@ -1,13 +1,17 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
-USER $APP_UID
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
+
 WORKDIR /src
+
 COPY ["ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj", "ExchangeHub.CurrencyWorker/"]
+
 RUN dotnet restore "ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj"
+
 COPY . .
+
 WORKDIR "/src/ExchangeHub.CurrencyWorker"
 RUN dotnet build "./ExchangeHub.CurrencyWorker.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
@@ -17,5 +21,7 @@ RUN dotnet publish "./ExchangeHub.CurrencyWorker.csproj" -c $BUILD_CONFIGURATION
 
 FROM base AS final
 WORKDIR /app
+
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "ExchangeHub.CurrencyWorker.dll"]
