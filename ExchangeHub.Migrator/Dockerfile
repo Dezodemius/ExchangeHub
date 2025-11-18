@@ -5,11 +5,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY ExchangeHub.Migrator/ExchangeHub.Migrator.csproj ExchangeHub.Migrator/
-COPY ExchangeHub.Shared/ExchangeHub.Shared.csproj ExchangeHub.Shared/
+
 
 RUN dotnet restore ExchangeHub.Migrator/ExchangeHub.Migrator.csproj
 
-COPY ExchangeHub.Shared/ ExchangeHub.Shared/
+
 COPY ExchangeHub.Migrator/ ExchangeHub.Migrator/
 
 

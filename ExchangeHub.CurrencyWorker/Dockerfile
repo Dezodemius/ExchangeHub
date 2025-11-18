@@ -5,11 +5,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj ExchangeHub.CurrencyWorker/
-COPY ExchangeHub.Shared/ExchangeHub.Shared.csproj ExchangeHub.Shared/
+
 
 RUN dotnet restore ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj
 
-COPY ExchangeHub.Shared/ ExchangeHub.Shared/
+
 COPY ExchangeHub.CurrencyWorker/ ExchangeHub.CurrencyWorker/
 
 RUN dotnet publish ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj -c Release -o /app/publish /p:UseAppHost=false
