@@ -1,4 +1,5 @@
 ﻿using System;
+using ExchangeHub.UserService.Infrasturcture;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExchangeHub.UserService.Tests;

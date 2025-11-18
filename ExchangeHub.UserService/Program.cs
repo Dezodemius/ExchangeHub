@@ -1,7 +1,12 @@
-using ExchangeHub.UserService.Queries.AddFavoriteCurrency;
-using ExchangeHub.UserService.Queries.DeleteFavoriteCurrency;
-using ExchangeHub.UserService.Queries.LoginUser;
-using ExchangeHub.UserService.Queries.RegisterUser;
+using ExchangeHub.UserService.Application.Helpers;
+using ExchangeHub.UserService.Application.Interfaces;
+using ExchangeHub.UserService.Application.Options;
+using ExchangeHub.UserService.Application.Queries.AddFavoriteCurrency;
+using ExchangeHub.UserService.Application.Queries.LoginUser;
+using ExchangeHub.UserService.Application.Queries.RegisterUser;
+using ExchangeHub.UserService.Application.Queries.RemoveFavoriteCurrency;
+using ExchangeHub.UserService.Application.Services;
+using ExchangeHub.UserService.Infrasturcture;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

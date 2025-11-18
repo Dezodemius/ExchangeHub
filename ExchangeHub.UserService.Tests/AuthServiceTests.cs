@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading;
-using ExchangeHub.UserService.Models;
+using ExchangeHub.UserService.Application.Interfaces;
+using ExchangeHub.UserService.Application.Services;
+using ExchangeHub.UserService.Domain.Entities;
+using ExchangeHub.UserService.Infrasturcture;
 using Moq;
 
 namespace ExchangeHub.UserService.Tests;

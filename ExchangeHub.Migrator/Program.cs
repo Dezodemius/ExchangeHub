@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ExchangeHub.Migrator.Application;
+using ExchangeHub.Migrator.Infrastrucutre;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,11 +9,11 @@ using Microsoft.Extensions.Hosting;
 
 namespace ExchangeHub.Migrator;
 
-class Program
+internal class Program
 {
     private readonly MigratorDbContext _dbContext;
 
-    static async Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
         Console.WriteLine("Starting database migration...");
 

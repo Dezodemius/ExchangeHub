@@ -5,13 +5,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY ExchangeHub.Migrator/ExchangeHub.Migrator.csproj ExchangeHub.Migrator/
-
-
 RUN dotnet restore ExchangeHub.Migrator/ExchangeHub.Migrator.csproj
 
-
 COPY ExchangeHub.Migrator/ ExchangeHub.Migrator/
-
 
 RUN dotnet publish ExchangeHub.Migrator/ExchangeHub.Migrator.csproj -c Release -o /app/publish /p:UseAppHost=false
 

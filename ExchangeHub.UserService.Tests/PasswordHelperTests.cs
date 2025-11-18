@@ -1,4 +1,6 @@
 ﻿using System;
+using ExchangeHub.UserService.Application.Helpers;
+using ExchangeHub.UserService.Application.Interfaces;
 
 namespace ExchangeHub.UserService.Tests;
 

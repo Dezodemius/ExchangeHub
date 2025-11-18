@@ -6,9 +6,7 @@ WORKDIR /src
 
 COPY ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj ExchangeHub.CurrencyWorker/
 
-
 RUN dotnet restore ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj
-
 
 COPY ExchangeHub.CurrencyWorker/ ExchangeHub.CurrencyWorker/
 

@@ -1,6 +1,9 @@
 using System.Text;
-using ExchangeHub.FinanceService.Queries.GetAllCurrencies;
-using ExchangeHub.FinanceService.Queries.GetUserFavoriteCurrencies;
+using ExchangeHub.FinanceService.Application.Interfaces;
+using ExchangeHub.FinanceService.Application.Queries.GetAllCurrencies;
+using ExchangeHub.FinanceService.Application.Queries.GetUserFavoriteCurrencies;
+using ExchangeHub.FinanceService.Application.Services;
+using ExchangeHub.FinanceService.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

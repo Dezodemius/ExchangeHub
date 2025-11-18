@@ -1,5 +1,8 @@
 using System.Text;
 using System.Threading.Tasks;
+using ExchangeHub.CurrencyWorker.Application;
+using ExchangeHub.CurrencyWorker.Application.Services;
+using ExchangeHub.CurrencyWorker.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
