@@ -23,7 +23,6 @@ public class Program
                 options.ListenAnyIP(int.Parse(port));
             }
         });
-
         builder.Services.AddDbContext<FinanceServiceDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 

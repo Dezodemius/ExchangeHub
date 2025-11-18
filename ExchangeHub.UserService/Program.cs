@@ -29,7 +29,14 @@ public class Program
                     .AllowAnyHeader();
             });
         });
-
+        builder.WebHost.ConfigureKestrel((context, options) =>
+        {
+            var port = context.Configuration["PORT"];
+            if (!string.IsNullOrEmpty(port))
+            {
+                options.ListenAnyIP(int.Parse(port));
+            }
+        });
         builder.Services.AddControllers();
 
         var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
