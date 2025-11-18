@@ -7,13 +7,13 @@ WORKDIR /src
 COPY ExchangeHub.Migrator/ExchangeHub.Migrator.csproj ExchangeHub.Migrator/
 COPY ExchangeHub.Shared/ExchangeHub.Shared.csproj ExchangeHub.Shared/
 
-RUN dotnet restore ExchangeHub.Migrator.csproj
+RUN dotnet restore ExchangeHub.Migrator/ExchangeHub.Migrator.csproj
 
 COPY ExchangeHub.Shared/ ExchangeHub.Shared/
 COPY ExchangeHub.Migrator/ ExchangeHub.Migrator/
 
 
-RUN dotnet publish ExchangeHub.Migrator.csproj -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish ExchangeHub.Migrator/ExchangeHub.Migrator.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

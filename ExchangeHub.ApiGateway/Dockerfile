@@ -9,12 +9,12 @@ WORKDIR /src
 COPY ExchangeHub.ApiGateway/ExchangeHub.ApiGateway.csproj ExchangeHub.ApiGateway/
 COPY ExchangeHub.Shared/ExchangeHub.Shared.csproj ExchangeHub.Shared/
 
-RUN dotnet restore ExchangeHub.ApiGateway.csproj
+RUN dotnet restore ExchangeHub.ApiGateway/ExchangeHub.ApiGateway.csproj
 
 COPY ExchangeHub.Shared/ ExchangeHub.Shared/
 COPY ExchangeHub.ApiGateway/ ExchangeHub.ApiGateway/
 
-RUN dotnet publish ExchangeHub.ApiGateway.csproj -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish ExchangeHub.ApiGateway/ExchangeHub.ApiGateway.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

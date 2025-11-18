@@ -9,12 +9,12 @@ WORKDIR /src
 COPY ExchangeHub.FinanceService/ExchangeHub.FinanceService.csproj ExchangeHub.FinanceService/
 COPY ExchangeHub.Shared/ExchangeHub.Shared.csproj ExchangeHub.Shared/
 
-RUN dotnet restore ExchangeHub.FinanceService.csproj
+RUN dotnet restore ExchangeHub.FinanceService/ExchangeHub.FinanceService.csproj
 
 COPY ExchangeHub.Shared/ ExchangeHub.Shared/
 COPY ExchangeHub.FinanceService/ ExchangeHub.FinanceService/
 
-RUN dotnet publish ExchangeHub.FinanceService.csproj -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish ExchangeHub.FinanceService/ExchangeHub.FinanceService.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
