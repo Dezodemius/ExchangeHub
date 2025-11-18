@@ -7,7 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-COPY ["ExchangeHub.ApiGateway/ExchangeHub.ApiGateway.csproj", "ExchangeHub.ApiGateway/"]
+COPY ["ExchangeHub/ExchangeHub.ApiGateway/ExchangeHub.ApiGateway.csproj", "ExchangeHub.ApiGateway/"]
 
 RUN dotnet restore "ExchangeHub.ApiGateway/ExchangeHub.ApiGateway.csproj"
 

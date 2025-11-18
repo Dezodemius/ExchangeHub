@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-COPY ["ExchangeHub.Migrator/ExchangeHub.Migrator.csproj", "ExchangeHub.Migrator/"]
+COPY ["./ExchangeHub.Migrator/ExchangeHub.Migrator.csproj", "ExchangeHub.Migrator/"]
 
 RUN dotnet restore "ExchangeHub.Migrator/ExchangeHub.Migrator.csproj"
 

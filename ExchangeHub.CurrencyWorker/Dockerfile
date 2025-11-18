@@ -6,7 +6,7 @@ ARG BUILD_CONFIGURATION=Release
 
 WORKDIR /src
 
-COPY ["ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj", "ExchangeHub.CurrencyWorker/"]
+COPY ["ExchangeHub/ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj", "ExchangeHub.CurrencyWorker/"]
 
 RUN dotnet restore "ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj"
 

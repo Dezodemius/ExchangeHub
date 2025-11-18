@@ -8,7 +8,7 @@ ARG BUILD_CONFIGURATION=Release
 
 WORKDIR /src
 
-COPY ["ExchangeHub.UserService/ExchangeHub.UserService.csproj", "ExchangeHub.UserService/"]
+COPY ["ExchangeHub/ExchangeHub.UserService/ExchangeHub.UserService.csproj", "ExchangeHub.UserService/"]
 
 RUN dotnet restore "ExchangeHub.UserService/ExchangeHub.UserService.csproj"
 
