@@ -10,7 +10,7 @@ export default function Register() {
 
     const submit = async () => {
         try {
-            await api.post('/api/register', { name, password })
+            await api.post('/api/auth/register', { name, password })
             setMessage('Registered!')
         } catch (e: any) {
             setMessage('Error: ' + e.message)
