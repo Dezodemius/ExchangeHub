@@ -4,26 +4,18 @@ WORKDIR /app
 EXPOSE 5001
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-
 WORKDIR /src
 
-COPY ["ExchangeHub/ExchangeHub.UserService/ExchangeHub.UserService.csproj", "ExchangeHub.UserService/"]
+COPY ./ExchangeHub.UserService/ExchangeHub.UserService.csproj ./
+RUN dotnet restore ExchangeHub.UserService.csproj
 
-RUN dotnet restore "ExchangeHub.UserService/ExchangeHub.UserService.csproj"
+COPY ./ExchangeHub.UserService .
+COPY ./ExchangeHub.Shared/ ../ExchangeHub.Shared/
 
-COPY . .
-
-WORKDIR "/src/ExchangeHub.UserService"
-RUN dotnet build "ExchangeHub.UserService.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "ExchangeHub.UserService.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish ExchangeHub.UserService.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
-
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 
 ENTRYPOINT ["dotnet", "ExchangeHub.UserService.dll"]

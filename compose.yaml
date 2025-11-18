@@ -3,12 +3,12 @@
 services:
   postgres:
     image: postgres:16
-    container_name: postgres
+    container_name: postgres_exchangehub  
     restart: always
     environment:
       POSTGRES_DB: exchangehub
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: app_secret
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -17,7 +17,9 @@ services:
       - "5432"
 
   migrator:
-    build: ./ExchangeHub.Migrator
+    build:
+      context: .
+      dockerfile: ExchangeHub.Migrator/Dockerfile
     container_name: migrator
     depends_on:
       - postgres
@@ -26,7 +28,9 @@ services:
     restart: "no"
 
   userservice:
-    build: ./ExchangeHub.UserService
+    build:
+      context: .
+      dockerfile: ExchangeHub.UserService/Dockerfile
     container_name: userservice
     expose:
       - "5001"
@@ -39,7 +43,9 @@ services:
       - exchange-net
 
   financeservice:
-    build: ./ExchangeHub.FinanceService
+    build:
+      context: .
+      dockerfile: ExchangeHub.FinanceService/Dockerfile
     container_name: financeservice
     expose:
       - "5002"
@@ -52,7 +58,9 @@ services:
       - exchange-net
 
   currencyworker:
-    build: ./ExchangeHub.CurrencyWorker
+    build:
+      context: .
+      dockerfile: ExchangeHub.CurrencyWorker/Dockerfile
     container_name: currencyworker
     depends_on:
       migrator:
@@ -63,7 +71,9 @@ services:
       - exchange-net
 
   gateway:
-    build: ./ExchangeHub.ApiGateway
+    build:
+      context: .
+      dockerfile: ExchangeHub.ApiGateway/Dockerfile
     container_name: gateway
     ports:
       - "5000:5000"

@@ -2,26 +2,18 @@
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-
 WORKDIR /src
 
-COPY ["ExchangeHub/ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj", "ExchangeHub.CurrencyWorker/"]
+COPY ./ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj ./
+RUN dotnet restore ExchangeHub.CurrencyWorker.csproj
 
-RUN dotnet restore "ExchangeHub.CurrencyWorker/ExchangeHub.CurrencyWorker.csproj"
+COPY ./ExchangeHub.CurrencyWorker .
+COPY ./ExchangeHub.Shared/ ../ExchangeHub.Shared/
 
-COPY . .
-
-WORKDIR "/src/ExchangeHub.CurrencyWorker"
-RUN dotnet build "./ExchangeHub.CurrencyWorker.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./ExchangeHub.CurrencyWorker.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish ExchangeHub.CurrencyWorker.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
-
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 
 ENTRYPOINT ["dotnet", "ExchangeHub.CurrencyWorker.dll"]
