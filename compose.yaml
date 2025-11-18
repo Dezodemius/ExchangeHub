@@ -1,31 +1,22 @@
-﻿services:
-  exchangehub.userservice:
-    build: ./ExchangeHub.UserService
-    container_name: userservice
+﻿version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: exchangehub
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app_secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - exchange-net
     expose:
-      - "5001"
-    networks:
-      - exchange-net
-  
-  exchangehub.financeservice:
-    build: ./ExchangeHub.FinanceService
-    container_name: financeservice
-    expose:
-      - "5002"
-    networks:
-      - exchange-net
-  
-  exchangehub.currencyworker:
-    build: ./ExchangeHub.CurrencyWorker
-    container_name: currencyworker
-    networks:
-      - exchange-net
-    depends_on:
-      - userservice
-      - financeservice
-      - postgres
-  
-  exchangehub.migrator:
+      - "5432"
+
+  migrator:
     build: ./ExchangeHub.Migrator
     container_name: migrator
     depends_on:
@@ -33,8 +24,39 @@
     networks:
       - exchange-net
     restart: "no"
-    command: [ "dotnet", "ExchangeHub.Migrator.dll" ]
-  
+
+  userservice:
+    build: ./ExchangeHub.UserService
+    container_name: userservice
+    expose:
+      - "5001"
+    depends_on:
+      - postgres
+      - migrator
+    networks:
+      - exchange-net
+
+  financeservice:
+    build: ./ExchangeHub.FinanceService
+    container_name: financeservice
+    expose:
+      - "5002"
+    depends_on:
+      - postgres
+      - migrator
+    networks:
+      - exchange-net
+
+  currencyworker:
+    build: ./ExchangeHub.CurrencyWorker
+    container_name: currencyworker
+    depends_on:
+      - userservice
+      - financeservice
+      - postgres
+    networks:
+      - exchange-net
+
   gateway:
     build: ./ExchangeHub.ApiGateway
     container_name: gateway
@@ -45,3 +67,10 @@
       - financeservice
     networks:
       - exchange-net
+
+networks:
+  exchange-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
