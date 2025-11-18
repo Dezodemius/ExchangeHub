@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using ExchangeHub.Shared;
-using ExchangeHub.UserService.Queries.LoginUser;
 using MediatR;
 
 namespace ExchangeHub.UserService.Queries.RegisterUser;
