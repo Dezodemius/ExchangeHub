@@ -1,33 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ExchangeHub.Shared.DTO;
+using ExchangeHub.Shared;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using static System.Linq.Queryable;
 
 namespace ExchangeHub.FinanceService.Queries.GetUserFavoriteCurrencies;
 
-public class GetUserFavoriteCurrenciesHandler : IRequestHandler<GetUserFavoriteCurrenciesQuery, IList<CurrencyDto>>
+public class GetUserFavoriteCurrenciesHandler : IRequestHandler<GetUserFavoriteCurrenciesQuery, IList<UserCurrency>>
 {
-    private readonly IFinanceServiceDbContext _db;
+    private readonly ICurrencyService _currencyService;
 
-    public GetUserFavoriteCurrenciesHandler(IFinanceServiceDbContext db)
+    public GetUserFavoriteCurrenciesHandler(ICurrencyService currencyService)
     {
-        _db = db;
+        _currencyService =  currencyService;
     }
     
-    public async Task<IList<CurrencyDto>> Handle(GetUserFavoriteCurrenciesQuery request, CancellationToken cancellationToken)
+    public async Task<IList<UserCurrency>> Handle(GetUserFavoriteCurrenciesQuery request, CancellationToken cancellationToken)
     {
-        var currencies = await _db.UserCurrencies
-            .Where(uc => uc.UserId == request.UserId)
-            .Include(uc => uc.Currency)
-            .Select(uc => new CurrencyDto(
-                uc.Currency.Id,
-                uc.Currency.Name,
-                uc.Currency.Rate))
-            .ToListAsync(cancellationToken);
-
-        return currencies;
+        return await _currencyService.GetUserFavoriteCurrencies(request.UserId, cancellationToken);
     }
 }

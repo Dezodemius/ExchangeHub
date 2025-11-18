@@ -1,31 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ExchangeHub.Shared.DTO;
+using ExchangeHub.Shared;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using static System.Linq.Queryable;
 
 namespace ExchangeHub.FinanceService.Queries.GetAllCurrencies;
 
-public class GetAllCurrenciesHandler : IRequestHandler<GetAllCurrenciesQuery, IList<CurrencyDto>>
+public class GetAllCurrenciesHandler : IRequestHandler<GetAllCurrenciesQuery, IList<Currency>>
 {
-    private readonly IFinanceServiceDbContext _db;
+    private readonly ICurrencyService _currencyService;
 
-    public GetAllCurrenciesHandler(IFinanceServiceDbContext db)
+    public GetAllCurrenciesHandler(ICurrencyService currencyService)
     {
-        _db = db;
+        _currencyService = currencyService;
     }
     
-    public async Task<IList<CurrencyDto>> Handle(GetAllCurrenciesQuery request, CancellationToken cancellationToken)
+    public async Task<IList<Currency>> Handle(GetAllCurrenciesQuery request, CancellationToken cancellationToken)
     {
-        var currencies = await _db.Currencies
-            .Select(c => new CurrencyDto(
-                c.Id,
-                c.Name,
-                c.Rate))
-            .ToListAsync(cancellationToken);
-
-        return currencies;
+        return await _currencyService.GetAllCurrencies(cancellationToken);
     }
 }

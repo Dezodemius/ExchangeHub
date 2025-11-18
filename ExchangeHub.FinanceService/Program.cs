@@ -29,6 +29,7 @@ public class Program
 
         builder.Services.AddScoped<IFinanceServiceDbContext>(provider => 
             provider.GetRequiredService<FinanceServiceDbContext>());
+        builder.Services.AddScoped<ICurrencyService, CurrencyService>();
         builder.Services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(GetUserFavoriteCurrenciesQuery).Assembly);
