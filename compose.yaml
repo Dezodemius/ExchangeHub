@@ -1,31 +1,47 @@
 ﻿services:
-  exchangehub:
-    image: exchangehub
-    build:
-      context: .
-      dockerfile: ExchangeHub/Dockerfile
-
   exchangehub.userservice:
-    image: exchangehub.userservice
-    build:
-      context: .
-      dockerfile: ExchangeHub.UserService/Dockerfile
-
+    build: ./ExchangeHub.UserService
+    container_name: userservice
+    expose:
+      - "5001"
+    networks:
+      - exchange-net
+  
   exchangehub.financeservice:
-    image: exchangehub.financeservice
-    build:
-      context: .
-      dockerfile: ExchangeHub.FinanceService/Dockerfile
-
+    build: ./ExchangeHub.FinanceService
+    container_name: financeservice
+    expose:
+      - "5002"
+    networks:
+      - exchange-net
+  
   exchangehub.currencyworker:
-    image: exchangehub.currencyworker
-    build:
-      context: .
-      dockerfile: ExchangeHub.CurrencyWorker/Dockerfile
-
+    build: ./ExchangeHub.CurrencyWorker
+    container_name: currencyworker
+    networks:
+      - exchange-net
+    depends_on:
+      - userservice
+      - financeservice
+      - postgres
+  
   exchangehub.migrator:
-    image: exchangehub.migrator
-    build:
-      context: .
-      dockerfile: ExchangeHub.Migrator/Dockerfile
-
+    build: ./ExchangeHub.Migrator
+    container_name: migrator
+    depends_on:
+      - postgres
+    networks:
+      - exchange-net
+    restart: "no"
+    command: [ "dotnet", "ExchangeHub.Migrator.dll" ]
+  
+  gateway:
+    build: ./ExchangeHub.ApiGateway
+    container_name: gateway
+    ports:
+      - "5000:5000"
+    depends_on:
+      - userservice
+      - financeservice
+    networks:
+      - exchange-net
