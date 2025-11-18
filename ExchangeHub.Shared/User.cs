@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ExchangeHub.Shared;
+﻿namespace ExchangeHub.Shared;
 
 public class User
 {
