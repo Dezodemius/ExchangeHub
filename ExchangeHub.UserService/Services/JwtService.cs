@@ -3,23 +3,23 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ExchangeHub.Shared;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ExchangeHub.UserService;
 
 public class JwtService : IJwtService
 {
-    private readonly IConfiguration _config;
+    private readonly JwtOptions _options;
 
-    public JwtService(IConfiguration config)
+    public JwtService(IOptions<JwtOptions> options)
     {
-        _config = config;
+        _options = options.Value ??  throw new ArgumentNullException(nameof(options));
     }
     
     public string GenerateJwtToken(User user)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
@@ -29,8 +29,8 @@ public class JwtService : IJwtService
         };
 
         var token = new JwtSecurityToken(
-            _config["Jwt:Issuer"],
-            _config["Jwt:Audience"],
+            _options.Issuer,
+            _options.Audience,
             claims,
             expires: DateTime.UtcNow.AddHours(3),
             signingCredentials: creds);
