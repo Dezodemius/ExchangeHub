@@ -73,6 +73,8 @@
       context: .
       dockerfile: ExchangeHub.ApiGateway/Dockerfile
     container_name: gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
     ports:
       - "5000:5000"
     depends_on:

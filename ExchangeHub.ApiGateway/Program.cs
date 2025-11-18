@@ -10,32 +10,20 @@ class Program
     static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddReverseProxy().LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
+        builder.Services.AddReverseProxy()
+            .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
         builder.WebHost.ConfigureKestrel((context, options) =>
         {
-            var port = context.Configuration["PORT"];
-            if (!string.IsNullOrEmpty(port))
-            {
-                options.ListenAnyIP(int.Parse(port));
-            }
+            options.Configure(context.Configuration.GetSection("Kestrel"));
         });
-
-        builder.Services.AddControllers();
-        builder.Services.AddCors(options =>
-        {
-            options.AddDefaultPolicy(p =>
-            {
-                p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-            });
-        });
-        builder.WebHost.UseKestrel(); 
 
         var app = builder.Build();
 
-        app.UseCors();
         app.MapReverseProxy();
-        app.MapControllers();
 
         app.Run();
+
     }
 }
