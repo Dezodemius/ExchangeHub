@@ -1,4 +1,5 @@
-using System.Text;
+using ExchangeHub.UserService.Queries.AddFavoriteCurrency;
+using ExchangeHub.UserService.Queries.DeleteFavoriteCurrency;
 using ExchangeHub.UserService.Queries.LoginUser;
 using ExchangeHub.UserService.Queries.RegisterUser;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ExchangeHub.UserService;
 
@@ -37,8 +37,11 @@ public class Program
         builder.Services.AddControllers();
         
         builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
-        
-        builder.Services.AddScoped<IUserService, UserService>();
+
+        builder.Services.AddScoped<IUserServiceDbContext>(provider => 
+            provider.GetRequiredService<UserServiceDbContext>());
+        builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<IFavoriteCurrencyService, FavoriteCurrencyService>();
         builder.Services.AddScoped<IPasswordHelper, PasswordHelper>();
         builder.Services.AddSingleton<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
         builder.Services.AddScoped<IJwtService, JwtService>();
@@ -50,6 +53,8 @@ public class Program
         {
             cfg.RegisterServicesFromAssembly(typeof(RegisterUserQuery).Assembly);
             cfg.RegisterServicesFromAssembly(typeof(LoginUserQuery).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(AddFavoriteCurrencyQuery).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(RemoveFavoriteCurrencyQuery).Assembly);
         });
         
         builder.WebHost.UseKestrel(); 

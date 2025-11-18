@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ExchangeHub.Shared;
 using MediatR;
+using Currency = ExchangeHub.FinanceService.Models.Currency;
 
 namespace ExchangeHub.FinanceService.Queries.GetAllCurrencies;
 

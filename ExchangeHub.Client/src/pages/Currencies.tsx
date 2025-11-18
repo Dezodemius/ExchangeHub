@@ -31,7 +31,7 @@ const CurrenciesPage: React.FC = () => {
         setMessage(null);
 
         try {
-            await api.post('/api/auth/addfavorite', { currencyId: id });
+            await api.post('/api/favorites/add', { CurrencyId: id });
 
             setCurrencies(prev =>
                 prev.map(c =>

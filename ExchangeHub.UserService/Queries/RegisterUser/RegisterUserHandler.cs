@@ -1,22 +1,22 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using ExchangeHub.Shared;
 using MediatR;
+using User = ExchangeHub.UserService.Models.User;
 
 namespace ExchangeHub.UserService.Queries.RegisterUser;
 
 public class RegisterUserHandler: IRequestHandler<RegisterUserQuery, User>
 {
-    private readonly IUserService _userService;
+    private readonly IAuthService _authService;
 
-    public RegisterUserHandler(IUserService userService)
+    public RegisterUserHandler(IAuthService authService)
     {
-        _userService = userService;
+        _authService = authService;
     }
 
     public async Task<User> Handle(RegisterUserQuery request, CancellationToken ct)
     {
-        return await _userService.RegisterAsync(request.Username, request.Password, ct);
+        return await _authService.RegisterAsync(request.Username, request.Password, ct);
     }
     
 }

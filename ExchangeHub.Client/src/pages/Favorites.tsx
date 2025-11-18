@@ -14,7 +14,6 @@ const FavoritesPage: React.FC = () => {
         setMessage(null);
         try {
             const res = await api.get<Currency[]>('/api/finance/favorites');
-            // на всякий случай проставим isFavorite = true
             setFavorites(res.data.map(c => ({ ...c, isFavorite: true })));
         } catch (e: any) {
             setMessage(e.response?.data?.message ?? `Ошибка загрузки: ${e.message}`);
@@ -32,11 +31,14 @@ const FavoritesPage: React.FC = () => {
         setMessage(null);
 
         try {
-            await api.post('/api/auth/addfavorite', { currencyId: id });
-            // так как это избранные — после удаления просто фильтруем
+            await api.post('/api/favorites/remove', { currencyId: id });
+
             setFavorites(prev => prev.filter(c => c.id !== id));
         } catch (e: any) {
-            setMessage(e.response?.data?.message ?? `Ошибка обновления: ${e.message}`);
+            setMessage(
+                e.response?.data?.message ??
+                `Ошибка при удалении: ${e.message}`
+            );
         } finally {
             setUpdatingId(null);
         }
@@ -53,7 +55,6 @@ const FavoritesPage: React.FC = () => {
 
             {loading && <div className="info">Загрузка избранных...</div>}
             {message && <div className="info info--error">{message}</div>}
-
             {!loading && favorites.length === 0 && (
                 <div className="info">У вас пока нет избранных валют.</div>
             )}
@@ -63,11 +64,14 @@ const FavoritesPage: React.FC = () => {
                     <div className="list-item" key={c.id}>
                         <div className="list-item__main">
                             <div className="list-item__title">{c.name}</div>
-                            <div className="list-item__subtitle">Курс: {c.rate}</div>
+                            <div className="list-item__subtitle">
+                                Курс: {c.rate}
+                            </div>
                         </div>
+
                         <div className="list-item__actions">
                             <HeartButton
-                                active={!!c.isFavorite}
+                                active={true}
                                 onClick={() => toggleFavorite(c.id)}
                             />
                             {updatingId === c.id && (
@@ -80,5 +84,6 @@ const FavoritesPage: React.FC = () => {
         </div>
     );
 };
+
 
 export default FavoritesPage;

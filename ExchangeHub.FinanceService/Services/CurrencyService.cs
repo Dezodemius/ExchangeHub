@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ExchangeHub.Shared;
+using ExchangeHub.FinanceService.DTO;
+using ExchangeHub.FinanceService.Models;
 using Microsoft.EntityFrameworkCore;
 using static System.Linq.Queryable;
+using Currency = ExchangeHub.FinanceService.Models.Currency;
 
 namespace ExchangeHub.FinanceService;
 
@@ -21,10 +23,18 @@ public class CurrencyService : ICurrencyService
         return await _db.Currencies.ToListAsync(ct);
     }
 
-    public async Task<IList<UserCurrency>> GetUserFavoriteCurrencies(long id, CancellationToken ct)
+    public async Task<IList<FavoriteCurrencyDto>> GetUserFavoriteCurrencies(int id, CancellationToken ct)
     {
-        return await _db.UserCurrencies
-            .Where(uc => uc.UserId == id)
-            .ToListAsync(ct);
+        return await (
+            from uc in _db.UserCurrencies
+            join c in _db.Currencies on uc.CurrencyId equals c.Id
+            where uc.UserId == id
+            select new FavoriteCurrencyDto(
+                c.Id,
+                c.Code,
+                c.Name,
+                c.Rate
+            )
+        ).ToListAsync(ct);
     }
 }

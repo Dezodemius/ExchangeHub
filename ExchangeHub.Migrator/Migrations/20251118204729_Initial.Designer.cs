@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExchangeHub.Migrator.Migrations
 {
     [DbContext(typeof(MigratorDbContext))]
-    [Migration("20251113130314_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251118204729_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,13 +25,13 @@ namespace ExchangeHub.Migrator.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ExchangeHub.Shared.Currency", b =>
+            modelBuilder.Entity("ExchangeHub.Migrator.Currency", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -49,13 +49,13 @@ namespace ExchangeHub.Migrator.Migrations
                     b.ToTable("Currencies");
                 });
 
-            modelBuilder.Entity("ExchangeHub.Shared.User", b =>
+            modelBuilder.Entity("ExchangeHub.Migrator.User", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -70,63 +70,20 @@ namespace ExchangeHub.Migrator.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ExchangeHub.Shared.UserCurrency", b =>
+            modelBuilder.Entity("ExchangeHub.Migrator.UserCurrency", b =>
                 {
-                    b.Property<long>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("CurrencyId")
+                    b.Property<int>("CurrencyId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("AddedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("CurrencyId1")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UserId1")
-                        .HasColumnType("bigint");
-
                     b.HasKey("UserId", "CurrencyId");
 
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("CurrencyId1");
-
-                    b.HasIndex("UserId1");
-
                     b.ToTable("UserCurrencies");
-                });
-
-            modelBuilder.Entity("ExchangeHub.Shared.UserCurrency", b =>
-                {
-                    b.HasOne("ExchangeHub.Shared.Currency", null)
-                        .WithMany()
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ExchangeHub.Shared.Currency", "Currency")
-                        .WithMany()
-                        .HasForeignKey("CurrencyId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ExchangeHub.Shared.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ExchangeHub.Shared.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Currency");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using ExchangeHub.Shared;
 using MediatR;
+using Currency = ExchangeHub.FinanceService.Models.Currency;
 
 namespace ExchangeHub.FinanceService.Queries.GetAllCurrencies;
 

@@ -1,9 +1,12 @@
-﻿namespace ExchangeHub.Shared;
+﻿namespace ExchangeHub.Migrator;
 
 public class Currency
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
+    
     public string Code { get; set; } = null!;
+    
     public string Name { get; set; } = null!;
+    
     public decimal Rate { get; set; }
 }

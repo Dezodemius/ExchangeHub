@@ -1,5 +1,5 @@
-﻿using ExchangeHub.Shared;
-using MediatR;
+﻿using MediatR;
+using User = ExchangeHub.UserService.Models.User;
 
 namespace ExchangeHub.UserService.Queries.RegisterUser;
 

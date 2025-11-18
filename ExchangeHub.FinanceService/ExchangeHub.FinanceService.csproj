@@ -19,8 +19,4 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\ExchangeHub.Shared\ExchangeHub.Shared.csproj" />
-    </ItemGroup>
-
 </Project>

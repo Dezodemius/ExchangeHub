@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ExchangeHub.Shared;
 using Microsoft.EntityFrameworkCore;
+using User = ExchangeHub.UserService.Models.User;
 
 namespace ExchangeHub.UserService;
 
-public class UserService : IUserService
+public class AuthService : IAuthService
 {
     private readonly UserServiceDbContext _db;
 
     private readonly IPasswordHelper _passwordHelper;
 
-    public UserService(UserServiceDbContext db, IPasswordHelper passwordHelper)
+    public AuthService(UserServiceDbContext db, IPasswordHelper passwordHelper)
     {
         _db = db;
         _passwordHelper = passwordHelper;

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ExchangeHub.Shared;
+using ExchangeHub.FinanceService.DTO;
 using MediatR;
 
 namespace ExchangeHub.FinanceService.Queries.GetUserFavoriteCurrencies;
 
-public class GetUserFavoriteCurrenciesHandler : IRequestHandler<GetUserFavoriteCurrenciesQuery, IList<UserCurrency>>
+public class GetUserFavoriteCurrenciesHandler : IRequestHandler<GetUserFavoriteCurrenciesQuery, IList<FavoriteCurrencyDto>>
 {
     private readonly ICurrencyService _currencyService;
 
@@ -15,7 +15,7 @@ public class GetUserFavoriteCurrenciesHandler : IRequestHandler<GetUserFavoriteC
         _currencyService =  currencyService;
     }
     
-    public async Task<IList<UserCurrency>> Handle(GetUserFavoriteCurrenciesQuery request, CancellationToken cancellationToken)
+    public async Task<IList<FavoriteCurrencyDto>> Handle(GetUserFavoriteCurrenciesQuery request, CancellationToken cancellationToken)
     {
         return await _currencyService.GetUserFavoriteCurrencies(request.UserId, cancellationToken);
     }

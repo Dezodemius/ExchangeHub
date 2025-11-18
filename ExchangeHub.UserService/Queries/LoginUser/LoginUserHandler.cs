@@ -6,18 +6,18 @@ namespace ExchangeHub.UserService.Queries.LoginUser;
 
 public class LoginUserHandler : IRequestHandler<LoginUserQuery, LoginUserResult>
 {
-    private readonly IUserService _userService;
+    private readonly IAuthService _authService;
     private readonly IJwtService _jwtService;
 
-    public LoginUserHandler(IUserService userService, IJwtService jwtService)
+    public LoginUserHandler(IAuthService authService, IJwtService jwtService)
     {
-        _userService = userService;
+        _authService = authService;
         _jwtService = jwtService;
     }
 
     public async Task<LoginUserResult> Handle(LoginUserQuery request, CancellationToken ct)
     {
-        var user = await _userService.AuthenticateAsync(request.Username, request.Password, ct); 
+        var user = await _authService.AuthenticateAsync(request.Username, request.Password, ct); 
         if (user == null) 
             return new LoginUserResult(false, null);
         

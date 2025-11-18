@@ -1,10 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using ExchangeHub.Shared;
+using User = ExchangeHub.UserService.Models.User;
 
 namespace ExchangeHub.UserService;
 
-public interface IUserService
+public interface IAuthService
 {
     Task<User> RegisterAsync(string name, string password, CancellationToken cancellationToken);
 

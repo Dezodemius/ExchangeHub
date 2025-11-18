@@ -1,7 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using ExchangeHub.Shared;
+using ExchangeHub.FinanceService.Models;
 using Microsoft.EntityFrameworkCore;
+using Currency = ExchangeHub.FinanceService.Models.Currency;
 
 namespace ExchangeHub.FinanceService;
 

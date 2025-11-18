@@ -1,5 +1,6 @@
-﻿using ExchangeHub.Shared;
+﻿using ExchangeHub.FinanceService.Models;
 using Microsoft.EntityFrameworkCore;
+using Currency = ExchangeHub.FinanceService.Models.Currency;
 
 namespace ExchangeHub.FinanceService;
 
@@ -14,14 +15,8 @@ public class FinanceServiceDbContext : DbContext, IFinanceServiceDbContext
         modelBuilder.Entity<UserCurrency>()
             .HasKey(uc => new { uc.UserId, uc.CurrencyId });
 
-        modelBuilder.Entity<UserCurrency>()
-            .HasOne(uc => uc.Currency)
-            .WithMany()
-            .HasForeignKey(uc => uc.CurrencyId);
-
         base.OnModelCreating(modelBuilder);
     }
-
     
     public FinanceServiceDbContext(DbContextOptions<FinanceServiceDbContext> options)
         : base(options) { }

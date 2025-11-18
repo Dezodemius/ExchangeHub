@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using ExchangeHub.Shared;
+using ExchangeHub.FinanceService.DTO;
+using ExchangeHub.FinanceService.Models;
 using MediatR;
 
 namespace ExchangeHub.FinanceService.Queries.GetUserFavoriteCurrencies;
 
-public record GetUserFavoriteCurrenciesQuery(long UserId) : IRequest<IList<UserCurrency>>;
+public record GetUserFavoriteCurrenciesQuery(int UserId) : IRequest<IList<FavoriteCurrencyDto>>;

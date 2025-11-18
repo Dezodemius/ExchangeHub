@@ -1,4 +1,4 @@
-﻿using ExchangeHub.Shared;
+﻿using User = ExchangeHub.UserService.Models.User;
 
 namespace ExchangeHub.UserService;
 
