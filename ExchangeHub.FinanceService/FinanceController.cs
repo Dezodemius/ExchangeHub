@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using ExchangeHub.FinanceService.Queries.GetAllCurrencies;
 using ExchangeHub.FinanceService.Queries.GetUserFavoriteCurrencies;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +27,13 @@ public class FinanceController : ControllerBase
 
 
         var result = await _mediator.Send(new GetUserFavoriteCurrenciesQuery(userId));
+        return Ok(result);
+    }
+
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+    {
+        var result = await _mediator.Send(new GetAllCurrenciesQuery());
         return Ok(result);
     }
 }

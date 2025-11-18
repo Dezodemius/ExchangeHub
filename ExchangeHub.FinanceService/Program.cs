@@ -1,4 +1,5 @@
 using System.Text;
+using ExchangeHub.FinanceService.Queries.GetAllCurrencies;
 using ExchangeHub.FinanceService.Queries.GetUserFavoriteCurrencies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ public class Program
         builder.Services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(GetUserFavoriteCurrenciesQuery).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(GetAllCurrenciesQuery).Assembly);
         });
         builder.Services.AddControllers();
         var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
@@ -51,12 +53,22 @@ public class Program
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
         builder.WebHost.UseKestrel(); 
 
         var app = builder.Build();
 
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseCors("AllowAll");
 
         app.MapControllers();
 
